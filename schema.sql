@@ -70,3 +70,19 @@ CREATE TABLE status_enum (status_value VARCHAR(20) PRIMARY KEY);
 #Inserting values in status_enum table
 
 INSERT INTO status_enum VALUES ('Open'), ('In Progress'), ('Resolved'), ('Closed');
+
+# Adding is_deleted column
+
+ALTER TABLE users
+ADD COLUMN is_deleted BOOLEAN DEFAULT FALSE;
+
+ALTER TABLE complaints
+ADD COLUMN is_deleted BOOLEAN DEFAULT FALSE;
+
+# Adding index to complaints table
+
+ALTER TABLE complaints ADD INDEX idx_status (complain_status);
+
+ALTER TABLE complaints ADD INDEX idx_category (category_id);
+
+ALTER TABLE complaints ADD INDEX idx_user (user_id);
