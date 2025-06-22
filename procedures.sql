@@ -31,3 +31,10 @@ VALUES( p_user_id, p_category_id, p_description, p_priority);
 END IF;
 END $$
 DELIMITER ;
+
+# Views such as user complaint view
+
+CREATE VIEW user_complaints_view AS 
+SELECT c.complaint_id, c.user_id, u.name AS user_name, c.category_id, cat.category_name, c.description, c.complain_status, c.priority, c.created_at, c.last_updated
+FROM complaints c JOin users u ON c.user_id = u.user_id JOIN category cat ON c.category_id = cat.category_id
+WHERE c.is_deleted = false;
