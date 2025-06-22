@@ -16,3 +16,18 @@ IF NEW.complain_status <> OLD.complain_status THEN
 END IF;
 END $$
 DELIMITER ;
+
+# Stored procedures for complaint submission
+
+DELIMITER $$
+CREATE PROCEDURE submit_complaint( IN p_user_id INT, IN p_category_id INT, IN p_description varchar(500), IN p_priority varchar(10))
+BEGIN 
+IF p_priority NOT IN ('Low', 'Medium', 'High') THEN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Invalid priority level';
+ELSE
+INSERT INTO complaints( user_id, category_id, description, priority)
+VALUES( p_user_id, p_category_id, p_description, p_priority);
+END IF;
+END $$
+DELIMITER ;
