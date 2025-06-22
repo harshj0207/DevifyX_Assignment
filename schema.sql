@@ -26,6 +26,15 @@ CREATE TABLE complaints(complaint_id INT Primary KEY AUTO_INCREMENT,
                         FOREIGN KEY (user_id) REFERENCES users(user_id),
                         FOREIGN KEY (category_id) REFERENCES category(category_id));
                         
+# Normalizing complaints table
+
+ALTER TABLE complaints DROP COLUMN complain_status;
+ALTER TABLE complaints 
+ADD status_value VARCHAR(20) NOT NULL,
+ADD CONSTRAINT fk_complaint_status FOREIGN KEY (status_value) REFERENCES status_enum(status_value);
+
+
+                        
 # Admin Replies Table
 
 CREATE TABLE admin_replies( reply_id INT PRIMARY KEY AUTO_INCREMENT,
