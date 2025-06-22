@@ -48,3 +48,8 @@ DO BEGIN UPDATE complaints
 SET priority = 'High' Where complain_status = 'Open' AND created_at < NOW() - INTERVAL 3 DAY;
 END $$
 DELIMITER ;
+
+# Full-text search on complaint descriptions
+
+ALTER TABLE complaints
+ADD FULLTEXT INDEX idx_ft_description(description);
