@@ -1,3 +1,4 @@
+
 #Adding updated_by_user_id column in complaints table
 ALTER TABLE complaints ADD updated_by_user_id INT;
 ALTER TABLE complaints ADD CONSTRAINT fk_updated_by_user
@@ -38,3 +39,12 @@ CREATE VIEW user_complaints_view AS
 SELECT c.complaint_id, c.user_id, u.name AS user_name, c.category_id, cat.category_name, c.description, c.complain_status, c.priority, c.created_at, c.last_updated
 FROM complaints c JOin users u ON c.user_id = u.user_id JOIN category cat ON c.category_id = cat.category_id
 WHERE c.is_deleted = false;
+
+# Auto-flagging unresolved complaints using MYSQL Events
+
+DELIMITER $$
+CREATE EVENT escalate_old_complaints ON SCHEDULE EVERY 1 DAY
+DO BEGIN UPDATE complaints
+SET priority = 'High' Where complain_status = 'Open' AND created_at < NOW() - INTERVAL 3 DAY;
+END $$
+DELIMITER ;
