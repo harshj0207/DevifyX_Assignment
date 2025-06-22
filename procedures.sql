@@ -53,3 +53,15 @@ DELIMITER ;
 
 ALTER TABLE complaints
 ADD FULLTEXT INDEX idx_ft_description(description);
+
+# Audit table to log all complaint updates with user and timestamp
+
+CREATE TABLE complaint_audit_log(audit_id INT PRIMARY KEY AUTO_INCREMENT,
+								 complaint_id INT NOT NULL,
+                                 updated_by_user_id INT NOT NULL,
+                                 field_changed VARCHAR(100),
+                                 old_value TEXT,
+                                 new_value TEXT,
+                                 changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                 FOREIGN KEY (complaint_id) REFERENCES complaints(complaint_id),
+                                 FOREIGN KEY (updated_by_user_id) REFERENCES users(user_id));
